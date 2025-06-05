@@ -1,150 +1,62 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Registro de Cuentas</title>
+  <meta charset="UTF-8">
+  <title>SPC - Registro de Cuentas</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 600px;
-      margin: auto;
-      padding: 20px;
-      background-color: #ffffff;
-    }
-    h1, h2 {
-      text-align: center;
-      margin: 0;
-    }
-    .form-group {
-      margin-bottom: 15px;
-    }
-    label {
-      font-weight: bold;
-    }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      font-size: 14px;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      margin-top: 10px;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-  
-    .alta {
-      color: green;
-      font-weight: bold;
-    }
-    .baja {
-      color: red;
-      font-weight: bold;
-    }
-
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f5f5f5; }
+    input, select, button { padding: 6px; margin-right: 10px; }
+    #spinner { display: none; text-align: center; margin-top: 10px; }
   </style>
 </head>
 <body>
-  <div style="text-align:center; margin-bottom:20px;">
-    <img src="spc_logo_fw.png" alt="SPC Logo" style="width:200px;">
-    <h1>REGISTRO DE CUENTAS</h1>
-    <h2>Central de Monitoreo</h2>
-  </div>
+
+  <h2>Registro de Cuentas SPC</h2>
 
   <form id="registroForm">
-<div id="spinner" style="display:none;text-align:center;margin-top:10px;">
-  <img src="https://i.imgur.com/llF5iyg.gif" alt="Cargando..." width="40">
-</div>
-
-    <div class="form-group">
-      <label for="fecha">📅 Fecha:</label>
-      <input type="date" id="fecha" name="fecha" required />
-    </div>
-    <div class="form-group">
-      <label for="dealer">🏢 Dealer:</label>
-      <select id="dealer" name="dealer" required>
-        <option value="">Selecciona un dealer</option>
-        <option value="ACC">ACC</option>
-        <option value="ALH">ALH</option>
-        <option value="ALS">ALS</option>
-        <option value="ASS">ASS</option>
-        <option value="CIM">CIM</option>
-        <option value="DIM">DIM</option>
-        <option value="DSC">DSC</option>
-        <option value="GOL">GOL</option>
-        <option value="IPS">IPS</option>
-        <option value="JEA">JEA</option>
-        <option value="MAC">MAC</option>
-        <option value="MAS">MAS</option>
-        <option value="NSY">NSY</option>
-        <option value="PIP">PIP</option>
-        <option value="SAI">SAI</option>
-        <option value="SOS">SOS</option>
-        <option value="SPC">SPC</option>
-        <option value="SPP">SPP</option>
-        <option value="SSA">SSA</option>
-        <option value="SSE">SSE</option>
-        <option value="SSP">SSP</option>
-        <option value="SSR">SSR</option>
-        <option value="STT">STT</option>
-        <option value="TSA">TSA</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="cuenta">📌 Cuenta:</label>
-      <input type="text" id="cuenta" name="cuenta" required />
-    </div>
-    <div class="form-group">
-      <label for="movimiento">🔼🔽 Alta o Baja:</label>
-      <select id="movimiento" name="movimiento" required>
-        <option value="">Selecciona una opción</option>
-        <option value="Alta">Alta</option>
-        <option value="Baja">Baja</option>
-      </select>
-    </div>
-    
+    <input type="date" id="fecha" required>
+    <input type="text" id="dealer" placeholder="Dealer" required>
+    <input type="text" id="cuenta" placeholder="Cuenta" required>
+    <select id="movimiento" required>
+      <option value="">Selecciona</option>
+      <option value="ALTA">ALTA</option>
+      <option value="BAJA">BAJA</option>
+    </select>
     <button type="submit">Guardar Registro</button>
-    <button type="button" onclick="descargarCSV()">📥 Descargar CSV</button>
-    <input type="file" id="cargarArchivo" accept=".csv" onchange="cargarCSV()" style="margin-top:10px;">
-
   </form>
 
-  
-<div style="margin-top: 30px;">
-  <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
-    <input type="text" id="filtroDealer" placeholder="Filtrar Dealer" style="flex:1; padding:8px;">
-    <select id="filtroMovimiento" style="padding:8px;">
-      <option value="">Todo</option>
-      <option value="ALTA">Altas</option>
-      <option value="BAJA">Bajas</option>
-    </select>
-    <input type="date" id="filtroFecha" style="padding:8px;">
-    <button onclick="aplicarFiltros()" style="padding:8px;">Filtrar</button>
-    <button onclick="limpiarFiltros()" style="padding:8px;">Limpiar</button>
+  <div id="spinner">
+    <img src="https://i.imgur.com/llF5iyg.gif" alt="Cargando..." width="40">
   </div>
-  <table id="tablaRegistros" style="width:100%; border-collapse:collapse; font-size:14px;">
-    <thead>
-      <tr>
-        <th>Fecha</th>
-        <th>Dealer</th>
-        <th>Cuenta</th>
-        <th>Movimiento</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</div>
 
-
-  
+  <div style="margin-top: 30px;">
+    <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+      <input type="text" id="filtroDealer" placeholder="Filtrar Dealer" style="flex:1;">
+      <select id="filtroMovimiento">
+        <option value="">Todo</option>
+        <option value="ALTA">Altas</option>
+        <option value="BAJA">Bajas</option>
+      </select>
+      <input type="date" id="filtroFecha">
+      <button onclick="aplicarFiltros()">Filtrar</button>
+      <button onclick="limpiarFiltros()">Limpiar</button>
+    </div>
+    <table id="tablaRegistros">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Dealer</th>
+          <th>Cuenta</th>
+          <th>Movimiento</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
 
 <script>
 document.getElementById("registroForm").addEventListener("submit", function(e) {
@@ -171,7 +83,7 @@ document.getElementById("registroForm").addEventListener("submit", function(e) {
   .then(respuesta => {
     document.getElementById("spinner").style.display = "none";
     if (respuesta === "OK") {
-      alert("✅ Registro guardado en Google Sheets.");
+      alert("✅ Registro guardado.");
       document.getElementById("registroForm").reset();
       cargarRegistros();
     } else {
@@ -228,8 +140,6 @@ function limpiarFiltros() {
 
 window.addEventListener("DOMContentLoaded", cargarRegistros);
 </script>
-
-
 
 </body>
 </html>
